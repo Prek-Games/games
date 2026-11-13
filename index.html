@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preschool Games</title>
+  <style>
+    :root {
+      --ink: #27364a;
+      --soft-ink: #4b5a70;
+      --sky: #4f9cff;
+      --sun: #ffc95d;
+      --chalk: #2c4a3e;
+      --paper: #ffffff;
+      --shadow: rgba(36, 54, 74, 0.18);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Trebuchet MS", "Comic Sans MS", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, #fff1a8 0 18%, transparent 19%),
+        radial-gradient(circle at bottom right, #c8f7ff 0 22%, transparent 23%),
+        linear-gradient(135deg, #fff7cf, #eaf7ff 45%, #fff0fa);
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    main {
+      width: min(900px, 100%);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 8px 0 6px;
+      font-size: clamp(2.2rem, 6vw, 3.8rem);
+      text-shadow: 2px 3px 0 #fff;
+    }
+
+    .lead {
+      margin: 0 0 32px;
+      font-size: clamp(1.05rem, 2.6vw, 1.3rem);
+      color: var(--soft-ink);
+    }
+
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .game {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      padding: 28px 22px 26px;
+      border-radius: 28px;
+      background: var(--paper);
+      border: 5px solid #fff;
+      box-shadow: 0 10px 24px var(--shadow);
+      color: inherit;
+      text-decoration: none;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .game:hover,
+    .game:focus-visible {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 30px var(--shadow);
+      outline: none;
+    }
+
+    .game:focus-visible { border-color: var(--sky); }
+
+    .art {
+      width: 100%;
+      height: 170px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    .art-memory { background: linear-gradient(145deg, #dff0ff, #e9fbff); }
+    .art-letters { background: var(--chalk); }
+
+    .mini-card {
+      width: 74px;
+      height: 98px;
+      border-radius: 14px;
+      border: 4px solid #fff;
+      box-shadow: 0 6px 12px var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+      font-weight: 900;
+    }
+
+    .mini-card.back {
+      color: #fff;
+      background: linear-gradient(145deg, #6db2ff, #8ee6ff);
+      transform: rotate(-6deg);
+    }
+
+    .mini-card.face {
+      background: #fffdf8;
+      transform: rotate(5deg);
+    }
+
+    .mini-card.face svg { width: 62px; height: 62px; }
+
+    .flash {
+      width: 96px;
+      height: 136px;
+      border-radius: 12px;
+      background: #fdf3c4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.9rem;
+      font-weight: 700;
+      color: #22201d;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.35);
+      transform: rotate(-3deg);
+    }
+
+    .game h2 {
+      margin: 4px 0 0;
+      font-size: clamp(1.5rem, 3.4vw, 1.9rem);
+    }
+
+    .game p {
+      margin: 0;
+      color: var(--soft-ink);
+      font-size: 1.02rem;
+      line-height: 1.45;
+      max-width: 34ch;
+    }
+
+    .play {
+      margin-top: 6px;
+      font-weight: 800;
+      font-size: 1.15rem;
+      padding: 12px 30px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #ffe680, var(--sun));
+      box-shadow: 0 5px 0 #de9d27;
+    }
+
+    footer {
+      margin-top: 36px;
+      font-size: 0.95rem;
+      color: var(--soft-ink);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .game { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Preschool Games</h1>
+    <p class="lead">Tap a game to play.</p>
+
+    <div class="games">
+      <a class="game" href="memory-game.html">
+        <div class="art art-memory" aria-hidden="true">
+          <div class="mini-card back">A</div>
+          <div class="mini-card face">
+            <svg viewBox="0 -6 120 130" xmlns="http://www.w3.org/2000/svg">
+              <g stroke="#4a3426" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+                <path d="M34 112 C30 92 40 78 60 78 C80 78 90 92 86 112 Z" fill="#f6cf8f"/>
+                <ellipse cx="60" cy="52" rx="34" ry="30" fill="#f6cf8f"/>
+                <path d="M34 28 C16 28 10 52 18 66 C24 74 34 68 36 58 C38 46 42 34 34 28 Z" fill="#b9784a"/>
+                <path d="M86 28 C104 28 110 52 102 66 C96 74 86 68 84 58 C82 46 78 34 86 28 Z" fill="#b9784a"/>
+                <circle cx="46" cy="52" r="5" fill="#33241a" stroke="none"/>
+                <circle cx="74" cy="52" r="5" fill="#33241a" stroke="none"/>
+                <ellipse cx="60" cy="60" rx="5" ry="3.5" fill="#33241a"/>
+                <path d="M54 64 q3 4 6 0 q3 4 6 0" fill="none" stroke-width="3"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+        <h2>Animal Picture Match</h2>
+        <p>Flip two cards and find the animal friends. Play alone or Red Team vs. Blue Team.</p>
+        <span class="play">Play</span>
+      </a>
+
+      <a class="game" href="letter-review.html">
+        <div class="art art-letters" aria-hidden="true">
+          <div class="flash">Aa</div>
+        </div>
+        <h2>Letter Review</h2>
+        <p>Big, clear letter cards. Teachers pick the letters or a letter set first.</p>
+        <span class="play">Play</span>
+      </a>
+    </div>
+
+    <footer>Works on smartboards, tablets and computers.</footer>
+  </main>
+</body>
+</html>

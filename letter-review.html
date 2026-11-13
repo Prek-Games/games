@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letter Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --chalkboard: #2c4a3e;
+    --chalkboard-light: #35594a;
+    --chalk: #f7f4ea;
+    --chalk-dim: #cfd9d0;
+    --sun: #f4bd4e;
+    --coral: #e8704f;
+    --sky: #6fa3c7;
+    --rail-wood: #a9724f;
+    --shadow: rgba(0,0,0,0.25);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background-color: #1f3a30;
+    font-family: 'Nunito', sans-serif;
+    color: var(--chalk);
+  }
+
+  body {
+    background-image:
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.05 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"),
+      repeating-linear-gradient(118deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 1px, transparent 1px, transparent 4px),
+      repeating-linear-gradient(28deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 6px),
+      radial-gradient(ellipse 520px 320px at 12% 15%, rgba(255,255,255,0.06), transparent 60%),
+      radial-gradient(ellipse 600px 420px at 90% 80%, rgba(255,255,255,0.05), transparent 60%),
+      radial-gradient(ellipse 420px 260px at 65% 10%, rgba(255,255,255,0.035), transparent 60%),
+      radial-gradient(ellipse 500px 300px at 30% 95%, rgba(255,255,255,0.03), transparent 60%),
+      radial-gradient(ellipse 1200px 900px at 50% 50%, rgba(255,255,255,0.02), rgba(0,0,0,0.12) 100%);
+    background-repeat: repeat, repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+    background-attachment: fixed;
+  }
+
+  #app {
+    position: relative;
+    max-width: 900px;
+    margin: 18px auto;
+    padding: 42px 34px 52px;
+    min-height: calc(100vh - 36px);
+    border-radius: 10px;
+    box-shadow:
+      inset 0 0 0 10px #8a5a3c,
+      inset 0 0 0 14px #6f4630,
+      0 10px 30px rgba(0,0,0,0.4);
+  }
+
+  #app::after {
+    content: "";
+    position: absolute;
+    inset: 14px;
+    pointer-events: none;
+    border-radius: 4px;
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.35), inset 0 -2px 6px rgba(0,0,0,0.2);
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 22px;
+  }
+
+  .header h1 {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    font-size: clamp(28px, 5vw, 42px);
+    margin: 0 0 4px;
+    letter-spacing: 0.5px;
+    color: var(--chalk);
+    text-shadow: 0 2px 0 rgba(0,0,0,0.15);
+  }
+
+  .header .sub {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    color: var(--chalk-dim);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  /* Tab nameplate switcher */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 22px 0 26px;
+  }
+
+  .tab-btn {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--chalkboard);
+    background: var(--chalk);
+    border: none;
+    border-radius: 10px 10px 4px 4px;
+    padding: 12px 28px 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.3), 0 6px 10px rgba(0,0,0,0.2);
+    transform: translateY(0);
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease, color 0.12s ease;
+    position: relative;
+  }
+
+  .tab-btn:hover { transform: translateY(-2px); }
+
+  .tab-btn.active {
+    background: var(--sun);
+    color: #3a2a10;
+    box-shadow: 0 4px 0 #b98a2c, 0 8px 14px rgba(0,0,0,0.25);
+  }
+
+  .tab-btn:not(.active):active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.3);
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ---------- Teacher panel ---------- */
+  .teacher-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding: 0 4px;
+  }
+
+  .count-pill {
+    font-weight: 700;
+    font-size: 14px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 7px 14px;
+    border-radius: 999px;
+    color: var(--chalk);
+  }
+
+  .count-pill strong { color: var(--sun); }
+
+  .toolbar-actions { display: flex; gap: 8px; }
+
+  .ghost-btn {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    background: transparent;
+    color: var(--chalk);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    border-radius: 8px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .ghost-btn:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255,255,255,0.6);
+  }
+
+  .letter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+    gap: 12px;
+  }
+
+  .letter-tile {
+    background: var(--chalkboard-light);
+    border: 2px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 14px 8px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  }
+
+  .letter-tile:hover { transform: translateY(-2px); }
+
+  .letter-tile.included {
+    border-color: var(--sun);
+    background: rgba(244, 189, 78, 0.12);
+  }
+
+  .letter-tile .glyph {
+    font-family: 'Andika Reader', 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--chalk);
+  }
+
+  .letter-tile.included .glyph { color: var(--sun); }
+
+  .checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid rgba(255,255,255,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.15);
+    flex-shrink: 0;
+  }
+
+  .letter-tile.included .checkbox {
+    background: var(--sun);
+    border-color: var(--sun);
+  }
+
+  .checkbox svg {
+    width: 14px;
+    height: 14px;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+  }
+
+  .letter-tile.included .checkbox svg { opacity: 1; }
+
+  /* ---------- Game panel ---------- */
+  .game-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+    padding-top: 6px;
+  }
+
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 700;
+    color: var(--chalk-dim);
+    font-size: 14px;
+  }
+
+  .progress-track {
+    width: 220px;
+    height: 8px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--sun);
+    border-radius: 999px;
+    transition: width 0.25s ease;
+  }
+
+  .easel {
+    position: relative;
+    width: min(340px, 82vw);
+  }
+
+  .card-shell {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 5 / 8;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--chalk);
+    box-shadow:
+      0 2px 0 rgba(0,0,0,0.35),
+      0 18px 34px rgba(0,0,0,0.35);
+    transform: rotate(var(--tilt, 0deg));
+    transition: transform 0.35s cubic-bezier(.2,.9,.3,1.2), opacity 0.2s ease;
+  }
+
+  .card-shell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .card-shell.flip-out {
+    opacity: 0;
+    transform: rotate(var(--tilt, 0deg)) scale(0.94) translateY(6px);
+  }
+
+  .rail {
+    width: min(340px, 82vw);
+    height: 10px;
+    margin-top: -4px;
+    background: linear-gradient(180deg, var(--rail-wood), #8a5a3c);
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+
+  .next-btn {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: #3a2a10;
+    background: var(--sun);
+    border: none;
+    border-radius: 14px;
+    padding: 14px 40px;
+    cursor: pointer;
+    box-shadow: 0 5px 0 #b98a2c, 0 10px 18px rgba(0,0,0,0.3);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    letter-spacing: 0.5px;
+  }
+
+  .next-btn:hover { transform: translateY(-2px); }
+  .next-btn:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 #b98a2c, 0 4px 8px rgba(0,0,0,0.3);
+  }
+
+  .next-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+    transform: none;
+  }
+
+  .empty-state, .done-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--chalk-dim);
+  }
+
+  .empty-state .icon, .done-state .icon {
+    font-size: 46px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .empty-state h2, .done-state h2 {
+    font-family: 'Baloo 2', sans-serif;
+    color: var(--chalk);
+    font-size: 24px;
+    margin: 0 0 8px;
+  }
+
+  .empty-state p, .done-state p {
+    margin: 0 0 20px;
+    font-size: 15px;
+  }
+
+  .restart-btn {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--chalk);
+    background: var(--coral);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #b5502f;
+    transition: transform 0.1s ease;
+  }
+  .restart-btn:hover { transform: translateY(-2px); }
+  .restart-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #b5502f; }
+
+
+  /* Andika: a font designed for beginning readers (single-story a and g). Embedded so it works offline. */
+  @font-face {
+    font-family: 'Andika Reader';
+    font-weight: 700;
+    src: url(data:font/woff2;base64,d09GMgABAAAAACHYABEAAAAAPXwAACF5AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGigbglwcgQAGYABECIIwCZwMEQgKy1DCRAuBBAABNgIkA4ICBCAFgw4HIAyBbxtIN0UkabU9RKZqkZB5weqPX3/++e/n/5fT+lclcOKQE55Rw1NX5M7YJXea3UCqODk96YWbpcFS7O5hWM0H0t8BrpCu/JFgRZB532lKtgO1pUDhKO1bkxzHOWB07AJCHA3s5jC5/QOQ2w4QLKkw4I/v/XWAttnJYRQLFhjJMFGHWJgIEmmCWJSB0Zi4MAs9k00XDU5/w3X+tz9W9jL0w5X//+q+9+xzg0JCQkKAgBeUYHgTs350Av63M048wcx6g0OMlZeLKtY/pKJzyJVdlG5Kw8Or074dyVaZUkBKWj4m8LuJhg2JJoT/U1XXO1BOa3VYSl3zMmXapH840Ph3JCOAJSYkvyeQag1qFTKfQymtNxlUM+UK17Y5W317PKWVacoyZZ0zZmzDFB/G1N7nbHeuO7/114UGAdkqSce8a02CiEbp6BBJLs1rPwk6REdI0LFsX0EnhCBZ9io1qE3OyuqZCzTTe+LBu2nm7vzhe2lmSJhCCIxu0NCWXZ/eJYeGSJx6g+aJxBQdlX5zjP4N+lf6F/o7+gv6I/od+jX6Bfop+hH6Pjqgb6Wvp6+krzj2RSRofsv7VKUxqtEcbaGttI22E9MOWqQ67aQGNUnTLlqmfXSIDpPwnu78rlDu3d19hvIH03nkUXwAgW8qzzXlixB4OPCUeBWUO3fzvEOc/zq/N92P1gV+sc/nXBiywG7O33dzf2rIa1rmkl6vfvcdt+UAFeLA/dJ4VKdttEBTNEqHSdJOOpTvu0gnjg3pGDnWTjoCsWjTQizYdd8pP0Qekfdyby+R2Badwvka9eWH4pI2M58CvU2/M8Gl8hTnT59heiUxPTn8qf/+LKoa/pTDDHzpUZlb876MNFOF+lPHmiFHaJBIXwYdgvqWTDfQk5ub231OUd5q8+ebH9/8oGtcZxsPURM1+gH9wP20YI7//sz9/uYf7111gwpenHNBLNDP6efeuxzOf4n+P1fTy/vy5m/d2uZvS1Ha8wfab8PXxS18XbjocFwUs7Iv+hR9il5AL5DP+/+35HfFXf//1v9egjL58v9/Cgc8/v9PafD0b5Zv9N/inZBvFPdHZf498mU44Ix82VYDaQZdTDsZ8/r7aPzsOvzzN6TYF2Aps1e5uJhCRvn7lb+Zej21EYQhKAMZtTIgQcYmMYQG26sxpFahCrEajub+O52ZWUoMpg1bm5RyxiRl5ERrKc2FxxmjCtKYvA+3+/hASmlsgvDKlrBm7QbjsyLZwpBGJYNpMW1sokDd9Eo2mBNEXjFcDaeJWZOyKsecMY3bIeA+42NduPUbBktizHR6HfidNIQTZeduTEMVBkXK6HbTECezgNHe1rWzjEvCtnkfS900LCUZy224TEQ+lpevclHkjGo3tQGD67G6VQ6QA35slmUBZIRR0wOdS0HrHatCjJoAyjbntvX8fTXqtS7kfR5tZFk/zyCaWSY8ybYh5oxKshie5g7DjfI+o2K6KSoqwZBKgjDMIGwMX9UecJrcLysbCTfAVGXAO9x2RcV2evAaYbLmhgsuIJrlshfBrZ9NbTfIz2WpysKMcfJ8mmKgE87HWDEqGsOmOSBpYjK0VsMqUQxSSQ65cRWiB2FRacQY1ixot3HTe59LGzzYxkmbNZt2JZ6sqgfD42Q6SSN0mtsY0U4kRynkE00FMnAjy51C5QZlijYoMEYjOMBJZbWCE6l8Zfc3ZKyvjcVuml/vyR7muJ7MVnvn2Cg5nW4aBirMGmGMCV1K2UE/X4lR0xCWGRPm+t7dGBMqyVAr0XOiZisyaaKmkCXj97nUK1SOSWO5sIxJlSgs/5Rev5CWbn8lW8TYFfV4jGm9fjZdP19RHITHgelTzuiSpsxFj6kpA5EnmGzONwdklJQTN7TmBTGnGE7UTUvVOeFGSVHwmO1rjVBB5I8yaIPupoyejZJhwqyhZtZsNIShMjHftCXRtFqBMKDjAyHE6Vab1VSS7FxIMaUS7mBcJRhTqNiE7XsXFgRN0jQlSSI9mVkbiLycGWri+c1gRxZjTpc024wxr0txTxYUSa5RHHKt4pJA8cgWxSdblQrZpgyR7crw7KZWuveEb9cvpIpbEDcvlHvG0A07zxU8cMF453rBg28Ya8JEU8Y0RP7uY4BLNhpSpjvgXlcA6IsA6BEAeh0AfScA+hIA+nUA6A0AUi3NR52V7PKwWLBsFIT1Bz2PDbT89TuzrLGriV2NGLs18xpb0lZ5W63qmbdiIHl4j3ntctzveFsu7G6UnpjtpMuZhNl7VZNRe2qf5v1Cl+7XhOvpsLt/iKYYUGfR3Lv2691Wjqt2uU/MyvmGHNB8lNdE/z6BTN6OcVC35o/GaHfzAWF67RiHdClpLuIWr60H+SCj00WxptZUzulGEHCXQiWDthCzM40YhzVoDvNHtW4EN+oydTlKCUZM80rRUsxHi3Z0EUdMbhUNDF8lhEmGDSd5T55N3+myx8E73bp3bZYE2dqq4UIRv0a1auGbuYo20KkHJH+usX0Fz+T9bgrX5AE8Y4PckOT5c8UMt65W83agUDWrByuzahjcruUUFWoUfGMN8dxelMOjmIRb50CJyp3I9oPoIDYVWYyjejgTM8Ord1BH2zGOVZuots1cBYwIFowcVx9MRNVyT9CFtMVHVXio5RXIInEzvBr8CF50+nWLasA5ejq3FCp3zz4hRNiYCu2LmyGnq5m35qRW3NLgz7yKeZN2g3NZykezVunhBlicSDoHW658KXLh+g8Ny5j4BR9WnV2J0bofUZ3diVx5+R7/uoO5Hd2aOd7D65wNiTg6XfBNuVLrdY0Oih+aNjhn23j5nvJ18R202x9TJ2VpxaHuc9Od/xDHPRjkgRD2zD3xHZGor8SilSKS47PBroRG+pxQJ8HuRDRecEmC06cnZcmcN6bA4v5AitY529YmnVN1vk6rkwAWFznb1yadM6qzc23SOavB/kfj5evKj+XijZoyzqnOPKpzNpF0zqtTABxLRDUX1CkAH8hFAZ/pl8CAl9vpcUWDGFMAoA7AtYY6jWJwONunQp1mW1Ip4XO9CiqwmkSBSg2LsRYMWAcGrGdHjyoNcIKNAGATANjcTk8oLQBsBQDbABDtItEjgQ44FZ0AiC4ARDcAogcA0QuA6AOgsV+dBHuMJwZKxc6Bo4JBehCHFM4u6aHyYXUStsuRC0BgdAYkYwmwl6IYLzHI9AVAmoCuJBOCjZLEAHk7AOSOBNhHS9xZYpB3XQCkBQC1eaOciAEyCwC5kgD7aYmrJQZ57QIgrwNAb/BGeTMGyBwAqbw6pbyqXXnHG5mSBPFoRTwaiVZWHko4/lZHXH4hvafG5Dv81MICCB5mxcFbOjHvdgB8GwGQ/wcALM/JHhO/9E68EPAOHYUhwTggWiIQ8ohYJ6QcaIcE8ohwqxGocTakJ8QtwBQWNsVAPFaEvySSFBCVMnRbWbCkKLoERTySHCxAsuSTQ4URHAstU+Rk8TLs93r9yO/3+eVQBJdGAvHFUhSvLkRFCEmSvHZtCJXhUrxMLZGWLypGfp8vEloSQLGl4aSC1iurFIUUmRmziGA0zQ2CTUo3oqpAc10NEZQ8hzaTc27aY7MY50qeUmC5GqUUWO4fco6xlY/zduFJquQ5hzaTSeUPrivn/pqD9jznSp6mNMbknOsCa1bJ82oa0dd54aCzwJpxuw5gjMHHOfGe+WByziVBEBBwnh8Hocc57JUMg0DFM4FFoyhHSQj8i9nIf6f9DRFBgjwBqfNaYCnowY+4QLIoCQLZr4AAVApkgq1NFFi8lOyr/pGPRYg2Izit6ysME2XMHdyqWeFpK2FCcEUaZaowwloaPczn5+c5N1FGx3R2dpYSw9QgGTHL3z9ObB4FZYLNahistHv9OdstY8jWl8qdWSdoqSiFNJc1o71Jaeoe1/1BjY9m8iufUBmphU2GVLPqzG3XNtt0k1qDSEXfBmB9SFPMK//Sq6mhULcdp9GHFIHPmCx7qdf65Jx7RG6HYP2Dbv2nzNIY9nKxQEiw42pplGFsEzaJ/rR5xtTkjJ5Oeb4ZGdsUzjDG1mGTUprMVHaglzk32qu68Quuq423MaZjU9MJRr2rDWBhZIuAtO84CiGRc67+mX1dWiz7S89exSOZKXypzaj23WTh/1Ej5Q4wOUj7+a3ZFLqPxWqUeTw7pZgpqhgn8hdGQjBo7wJYJx8l9n8lO7XnuhgTYLe9s1c1GATEay2KmG54YRYcClm8RjRnUdq1W0J2NmvbMA/KZ94tbC1k25VAyCdvW5RGq1LQnqsa3wAWXcauKN13rfHms6Boz+lN2Zh+jk48oMvGKCJ+Oh4FWZ1IyGOz73TMtnUx/CwtW/zsNgLaRJEwWpbYID1ttQnfS+lSQrYQb1Vtm+mRjDVb9nk0vpdGm4Tu0e9gZ6E91ypQotswPVqzUra1ga7DMhpELNxgDmIUrCPpDUT7yjz4ovcHRwsbDNzOHwJj2dmrIrZnX/qtkq8PwXCRx8RuibJaOpZYGny992GsBM6fdEtfcGGHzBjTH5oVNbVEqa13a+eGGlRXg+o83a4Nj71373f0RUpTY5UViHO+vrmqGrvugf6KrmpzsMZ7ZunGs+lyfM+Nh/kP0dnpHunizaemqtYAJUG1rV65WevUJlOrulxRh+e3UCB95V6Gq6v8JKpn2jXKMDe/WXVmQA1gCpjAXBgNp4r3PBYyDa/Mg1U/yNY7oPA6nU5XBd+5NOvF79CEOl0cxhGoFYAw16uJZ+MWJRMBhtyR8TchuyWjgoJGNTNyNvrgsz/rNMDQaAIwNKI9uwcY7GMDBvu8hG4a/wHPjo2botM2bor2bAsYVmHypfaP7v2ivKt0t940V6rq7MsRJmzlt/ukwZC9Vg694Fc1A74MV+5eIXfubFQ090kwTGRHVHJv5Zaam6vkU/JbYBu8Wg3+Yy08UZ0OsuKVrvyMRNmRzBEC62MfzujSGOOcK/831+OjjPnL+Y6XL6+I21ofhuRwKO+FzDNEaeWlovz5Ix8fr7lS9DTNY98NB2b/LemVgK2wZsAv9rrtNf6e3VLwwjExsEd9I/V3txT8IGwAzIABatg/axYPfLoiNAgq/E3S+GjyZsnTu+Ja1yKYuzU6Bz2P3gfrugQfWj6lBhcgLgQuqIef5XtZo5Pd590X28C/DwSpwQWIAYHP1Zpn1ejY3jVle3JAWsstX80E+/2HCzzGid+q3+Bb43lvZYx7YTn1V6uyZweXdKhj/DZbvptJ0Hx47CUAW8WtwqrBaUgAgdNqrIArwKrBaUgAgdMORhjtt18+WH745dsvHyw/oB0ntdi89y+u1q+9q1h+nA/5bNko9y7fDFQOhbAF/GSb/vgDPfDv6CB9bZT7X6sp7i2mq+cknntDih2uawF9LVYNLkBcCFxQYy4/vd/5ED60fFANLkBcCFxQY+0I0cj1Jbv1yh3WXetxXvekp8IBnmqM/q43NYlIML1hbmrmYmJl9BzekkTRIvSgSex3BHyPeQ4iHeGLeOxhvmx7u8+vwfZ2HwDoa5Eq+AKkF4jRAvpapBrc/fb3jrhyd2/Sq93bsrP2VQinB3cnv967PTdtT6l42vq4Ntvq5LXXsmoNWjPOfq/Ntjx9/Y2sVm2vOcqyu2wigOCLw0Gcoq9lf18DYtgQOAGL2vM5vennoeHWmX/L92cl31taSoB7Kgcam/Iam0YCaTA8v+fJne0O+Vmt1STIj2JY50rxpRehLERuxaFFYQlu6ymfAzVoVrdjbSQgyXhNwmnvy/R+Lv4nQwDrAcdhgh2vhfXnlSOq2yvCrqOdp1R1Qxn1RR3ihkASLFyIwANhgoyusv1FKl6RXiqB7CvHGpUGjvtnp1RkhLrPNoTUutwM+fPKSJdS97kC2mnOignErc3mPedWhhd7UhPC3HA0JbPbYwdub3mgMoFM6K2qvhTVVH3TzQ3mqx1YSS42CHmAazfQ3aLcMtC14/4OlhskO4aVarEq+CPV9yUrZwtrG+el7xC4oMbW5+JGq+IL8iricaO5VpRJLU4TvBOvRKXRIlFpNHx36Eg7DlU/YZViDyBr1l739tuC2+miRKbRbCa16596I2uOrO+zYA6v09cia9ZTvOHM4fUUC8s+7drr3siaI8h1NOdO/J7swBk3H36oLKYyJPp/ips2LSyTXeJPv49FHhdGp4iJK/5Mljw4652ZMNoJoCwT+VHbAiROoV5O/xGkhSdjC9iWvWtMiy8VW5LXkAJjY2oocgzRssgGDoEL6iA1uAA5Upe14x5wu6DeRePTK+xdHvWeL/f+YhButuJj2Eh0zvk0swtFjjlZoEjt386b71GXfJtqUyqB4EJrk/UmdGBcf/+azxcThqM3eOe1j3U0ClSxHKgkkbD3tvvH0CoPXmHjWE/9toMViTUEIt7mPdljbHNh43R53bN9O6r/e9U9kqpydaOcIHqedwPsYpEHbaVXSaIxWWbVmfLMhz0/1YEznU1BdfgoVIXJ5IweNBET4ZBlRfURM4JbpI4XfGWE2CQozOEKoNXLShQm5GZCE6PblVuk5zyS/dbN5/jdwpbWL5a2Pj9yoOLzbOPwtj38ZCVGK0TohyLSeqb/eHI6oM3lXMDit0RHDD08S3GAfVBpbr6K64dh3KTfmr2VRCJf19THnm0vO+qf2PAnjUqI+32hOywmrNiDJuOfZiUf40cl7IyXXBqVE3VNmr/SIOmU18WwRI4zR5CTsrmb25OSRfOvF5JGyBGoyjWrPx133w0ujTsXf5nrM2MIfxfm4EY9+o8dY6LIoztrMT1MaRQhi8iV0E1ivzqzjoyWbSTCTxiN8bD0K5dpPXAjm7McqYTNkUg4XImYw5aKg+3IXxfPlN6/lbSV2hXwL/bNqlwvvObr9x64kTEXmcuRStgciYTDlYg5bKk4ZRRVuWb1R637bnBp3BlPLjd//dAVPJ/CGiigWN8gphPhk0ZjfGw2BjmxmSiFIFSgaJ1oDTYgk29NrkbJeh1++Qw32xAtSUodIcZLFemo8JS0/aTIwdIrpyGUUzoyc4OHfwY9SYwC+M2DTa6tzOwoQhaRK0FGoICEzoOjgb32v4BIOYJiTnMS5p4UZQ9qfv/VW6UZFPMSVjTNbxcVTZ06ReVbjab5zaKiqUOnULzZqO7K3iuTFO7t6s7eK5MU7rXT//wVuX89Ly8i9lRWXuGBmuTFXnX5yp2WqsgtmykuugpT1W+4pedLZ1cZOKfYsP25GJ/kttG25vRdSeTmfClO8krK4XaEU5NPSRR3RuVBuq2aa2kt8hde6ZZA7uT007s9VhWmqt+QyMSeCDtSakWKXzcXqmiI9M2LCT6MkvH/d1cJgmHOcqbLxvIjhEUZ+MMZM45wsn8M0YHHYBbb0AN6Lzm92nIkPFNACrJF7Y6zjl8jQ2roGZUisXzoWoKicT6C6OG3xAieYghoAj80NonUadthC/F8c8IwztnizEPUGsVxbzd8uMUcFVu3yU+o8k6ulhuaG6DujemKLPIKPehZfMNbhvxm41n7NHl8xoVsGeGoIT+PbyjSbzRPwLo3ByrYnulkviTEkqQnMRK2YwOVDo8ZOPRXn1NBjd6Kf71CVYwzzAv2Mcvu+dL/Ehdt2f/hKwMbTwW8fGDl2vv1w6mZHTP2G1iOxTYy01ODjodPHD7heGpwfaTXqGOx/Y4ZBy+3tza+NDLPN5yJeasLYDISfIkNsjjgXQbOj0ZPwVNqxhojDZ6KcOxUfmGzk+CPOrT9K8sI5iFCCSFV+n6QcqnzjoqR1F4cR3nwv2wzzm6eLMakLHrmbi5649rNWU98sY5NwMvJh5wM//pK7l4DUXwLwOxnhaOGDZHYGPCM57M2vPO/e5Hzf8ydDmhzOUd68CDOGk0Pz1IMKedvLrvFt0PMw6oiJBG+eLYapsavlkARiyIoIhGFKhJSIsTCcr1FzK1b++f/nXvgU23nt5FEhE86/0IBfZcZOdorT5qlGP5x64d/OPhyZPea6CzyERUYwiZenWZcnrVtbGaqnDKnPD6fpcq7h4pD/nEeDYQ3kCIiEcSscjnudKaAmOvhlhjLq6F0uWyJKb36di0v4d0Ugw94i4+vwHjuNX8iNDxdPDahX9Dw6d37YxGknEynHrryrc/vv/Fs579yPJlfffmPY9GHZtL9/rcOP3XJ+Mr+P5KP8dyrl37zhxc6z330k7tv/OHpT/xbQdFF4yJ/t1wfePXBlUftS7d+OX14/OB3f3iP//SnPnGU69Os6RYRa7pxG7gZuBd4YDS00U2IL2+ne/T//8lfyw5NiOS/9fty+jdi72l8ueBzu2hzl+ZkaRQEkzgjBviDxIyNhCdekJJIGtLQ6hO2fKHW6byZBpDAQuFTtzWV4gkBp0sGUUsr3/c7fieM4452hvPmRvEpxwCKeEGkoSSpMwJ4Q8ynS5JSbEiIVqym0+nV6ZVnP/bctSPDyebNuRCMCIIBEmJBzGgJeLIkIagloj2tyrIuJIOVmE7AAgsJIWhDRKdLUt8tVuPxeD6e1h9+pJzBvDkxwcDiNzk5mXBGSskNSXmuiTFpmEaXw452RvPmsBPnk6F7y6swjcOOOtn1QdCtA8VjCCnojpYLDUVSKHnGM/t5UYvDbllW+TSTE5KfYNo4U6DNlVgRhmnIQbkCMKlbSogIGw69k9sBwDoeLDvZ29WsI6Qe7VhLFiAspIiQWDDVnN+yrMiKol7n2JEEMbNMmgin+rPS6NJw+1zqcHqNNoAys5TkLK9tDfq9xHOt2I6jKDQ74kW7jYcFQO8UwDvUmJx4CRxHSid2Ys+VtrQT7aSRPopPLVoS4snSm1ti3vOqrqtcmjjXpRGEJLDgxUe3PQXvFaTExvkEpTmyLKuz4mp1FkejXhSAwsIA8C4kQT+xIaduK4VWAaCf2qq+HM+1aN6o/MgmoUH9CmeGVFZZ+uGQ6ML5YTE8Gmc0oP5ZbDr9eVP3sjgl+tcYDDJCycXyRAb7oMvsgFnCpKpDpa7FVzqt2HcAPHUYrWdp0auqhatR3sjUGI1j6zpvOoa0hKpso23FpmpZS983TaI4i7O053f9btgxPdNzbDLIiFylW3ni2fRWAubxJEp7gU8OOYkiaHFgahZszeE0W1JxEsecNb0MsPA1DLYWgVi0w5xUPalg05OIAgquRFfcbW0CDYlRxkLGYCEW73r5yosfaoZEtF0d2OTxk2rQfAGzhqsG/bjV+q3ipKoX5a619wzywbDGsE961QFVWYwW9CB5lLGSJlCxp0ntSEOIjHUuQp1S1MIDZCbiyIftJUStX6lGu0fWHDaEdXByN/tYr5sOUVUcTmhIw6qMDZ10uxtAUAfS0/eBhgEKJUSZSk2XyDxS7uUKNBrGkecYi2vdjnFsOL15Y2uADAjw4l0vD178UJMREHyM7XLGMLOFdj6XzJqBaYgYeV+fe914aZoO02HcL4+X00o/JEhxfMRKRmBlA2yBoBbziumITTbeLkfs/phWZVFXZbm8xBtrHTfyo3oE6C4kVHvLpqdPWCK80rl+q+7Vg9C4au9wYnnc6j20Ww5W1nS/+rkni31N3frNYjZYQrvYVjGbxyHmIpyJDsq5F/NObMBrFyRZyH19IXwGROMsTSiiqCy005+/FQa+CKEqVRlOD4YEJctK5XHXptdvJqFwaoJucApvVzb1qeo9wJTYDrLISsTcdLrDmCHs77Q0g+/SN1B4jf09JdmeRHMqWaNqC1I606Cmn2rdOEW3KONuEZrOZN7YE0D42OmuXcJ2UVfslqzoydRnTMAtI5+s9bFuQtDx4XDQCRyLZphp9wyPDofDPhkgDyjKanGBhKLJmKWKwFK4sLb8IjuHwT3nxY9FIg/szOfVyJ9s7bVurGLWq8o9Jrk9scB4xFIAJMVirWVD1AM1c4N8j3lFVJeHE8ooq3PrTti4NgQGUShI6EOEQ8E4kZ2tzIRK3DtDn6yrW79ZVbELGnV6wLhwz62LA86X59E+6NkAMStpLWZbSnwuCNANm63a6wsIj48PiR83FOL4MKx6eWt7CMESEtAkGknnrhCCtutcrOlVME8tFwLbVavurX4+KFfaRD85JGkLLdofwDHpOiz4VQcFuDkLKuk4SqJhrn3PJdsZeaCmgK8SgYqAD/I4lRVlAuecISgwFoEFhkHZUmEcsdec9S2vrkR72QG2C00eDKfOqtbI7mQYuiWtt87Ew2GpNDlYKsfUeB+kyRDa2HfYZ90kK3jpwrlpWeTHgz6llJZTy+nP3whXP2Am83WL78lybJeWyVrTRklnGti7Wllz9CW3BbknnGO7j3UTEtERHcVhN0+iPLQX7UAngeChZmnc7J4ngosHDTzC0EWD/DAjH1HOqukiggKecQDLu1yyby1J3+ddWJbRmjCM7ZJ832vJ87ZL9eJ9Mr1xAltovVvKtee3ZGbCcGH5hrUnj3zt+XsyXL8kXI2nm3t3rl+9cJ5O6GRW53kYxmEcJh3nIBrozADnqsFswE5TH46zXXrID6u1YVnbpaFYCN64ZqnYLbUUobayYXn7L7nvkUEnXL/eGPPm9UsX6QJdODlXFaOnunkSFDXHIHP+SkOD55EDIrO1YJpbCvBuKml7aOqBICztuaMjXTTlpqEpBrf26+zwzUxPSoyf6iy/WPeM/TPCNEbIgyZtNgzr6VX2VZkqSj9OHpV6n2Pa4F9Lf8/zPeVa908oQo+l9u8FhXjPfgG/lv4+63vqnxpO6ZCT6KcnfMLyEnlyMJYcTBd5CUscxBJbseRRusgPWCKAOcLALi0sMQTLrMQyXLDkQ7qI349TdZH9sMQDuoiPxMrr0RRyHyGqI3bZHrtsF00jnuMUb+knjjDJ9o+kEOfuQBdbFHaxJfcNJumzWK1v/F8lxkSjbTaeMlY8oqdYhFOIG/QU+zeD7QU9hRv9bOOxi0dMF61wNWKIFVtIEs3+fxNxkS2HYr8GVlqSUgaucYH3LvJGUQ76WHYnRwhmFCY6s7jLctByPd2RLUnFgF+M9BEuQBtuP56o4c75E3UUx0+00cCUEwWB9DtREkqTEw0CydM98zWBQYxjHKMoIZNMxtKXMQxmFOOwbwZjt+0wMhjJGAaSSUvqaIaTEfRjMEPpTTpVjGQY/ehAf8YQf92RjCCKAjLIJovsfOeorm1ppBlRNOZi3LD6EfRm3NDq3gyjJM4ghlorh6x/SNGeu4j0alijmCyHGChf2yiS6EvyEPhXqEj64BsbJYa0Oe3z/l9DKzZjN93L2Tadtmnais5btR9qTj9qG2aVw2XtzKEdq7MxSSkv3HuBGqN6qCaqyEyRdmG6Vk2zyphmDDLaGU6ZbYvTo6X0rHK6RB8NPxp01Peop8P1qHkUE7eCBtwaxx8A7hPQq2ZbnLaodaetjkWdyqSfklSyV5E5qOkcti2xmGC/moUmHIv6tquEzdZxeC9S41Qv1UyVmGkySpieKXu1//O3iuXbdGp2yH4GNTUA) format('woff2');
+  }
+
+  .letter-card {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg, #fbe3dc);
+  }
+
+  .letter-card .big-letters {
+    font-family: 'Andika Reader', 'Andika', 'Century Gothic', 'Trebuchet MS', sans-serif;
+    font-weight: 700;
+    font-size: min(150px, 36vw);
+    line-height: 1;
+    color: #22201d;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+
+  /* ---------- Letter sets ---------- */
+  .sets-panel {
+    background: rgba(0,0,0,0.14);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin: 0 0 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .sets-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  .sets-label {
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--chalk-dim);
+    min-width: 140px;
+  }
+
+  .set-chips, .inline-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    flex: 1;
+    align-items: center;
+  }
+
+  .set-chip {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    color: var(--chalk);
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(255,255,255,0.3);
+    border-radius: 999px;
+    padding: 7px 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .set-chip:hover { background: rgba(255,255,255,0.16); }
+
+  .set-chip.active {
+    background: var(--sun);
+    border-color: var(--sun);
+    color: #3a2a10;
+  }
+
+  .chip-hint {
+    font-weight: 600;
+    opacity: 0.75;
+    font-size: 12px;
+  }
+
+  .set-chip.saved { padding: 0; gap: 0; }
+  .set-chip.saved button {
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  .set-chip.saved .chip-main { padding: 7px 6px 7px 14px; }
+  .set-chip.saved .chip-delete {
+    padding: 7px 12px 7px 6px;
+    font-size: 16px;
+    line-height: 1;
+    opacity: 0.7;
+  }
+  .set-chip.saved .chip-delete:hover { opacity: 1; }
+  .set-chip.saved .chip-delete.armed {
+    opacity: 1;
+    font-size: 13px;
+    font-weight: 800;
+    color: #3a2a10;
+    background: var(--coral);
+    border-radius: 0 999px 999px 0;
+    padding: 7px 12px 7px 10px;
+  }
+
+  .sets-empty {
+    font-size: 13px;
+    color: var(--chalk-dim);
+    font-style: italic;
+  }
+
+  .text-input {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    color: #22201d;
+    background: var(--chalk);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 7px 12px;
+    min-width: 0;
+    flex: 1 1 160px;
+    max-width: 280px;
+  }
+
+  .text-input:focus {
+    outline: none;
+    border-color: var(--sun);
+  }
+
+  .ghost-btn.solid {
+    background: rgba(255,255,255,0.12);
+  }
+
+  .set-note:empty { display: none; }
+
+  .set-note {
+    min-height: 18px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--sun);
+  }
+
+  /* ---------- Game navigation ---------- */
+  .game-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .nav-row {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .back-btn {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    font-size: 20px;
+    color: var(--chalk);
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgba(255,255,255,0.35);
+    border-radius: 14px;
+    padding: 12px 26px;
+    cursor: pointer;
+    transition: transform 0.1s ease, background 0.15s ease;
+  }
+  .back-btn:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
+  .back-btn:disabled { opacity: 0.35; cursor: default; transform: none; background: rgba(255,255,255,0.1); }
+
+  .key-hint {
+    font-size: 13px;
+    color: var(--chalk-dim);
+    opacity: 0.8;
+    margin-top: -8px;
+  }
+
+  .done-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .ghost-btn.big { font-size: 15px; padding: 11px 20px; border-radius: 12px; }
+
+  /* letters scale with the card, so they grow in full screen */
+  .card-shell { container-type: inline-size; }
+  .letter-card .big-letters { font-size: min(150px, 36vw); font-size: 44cqw; }
+
+  /* ---------- Full screen (projector / smartboard) ---------- */
+  body.is-fullscreen .header,
+  body.is-fullscreen .tabs { display: none; }
+  body.is-fullscreen #app { max-width: none; margin: 0; min-height: 100vh; border-radius: 0; padding: 28px 34px; }
+  body.is-fullscreen .easel,
+  body.is-fullscreen .rail { width: min(82vw, calc((100vh - 230px) * 0.625)); }
+  body.is-fullscreen .key-hint { display: none; }
+
+  @media (hover: none) {
+    .key-hint { display: none; }
+  }
+
+  @media (max-width: 560px) {
+    .sets-label { min-width: 100%; }
+    .text-input { max-width: none; }
+  }
+
+  @media (max-width: 480px) {
+    .letter-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="header">
+    <h1>Letter Review</h1>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-teacher-btn" onclick="switchTab('teacher')">Teacher</button>
+    <button class="tab-btn" id="tab-game-btn" onclick="switchTab('game')">Game</button>
+  </div>
+
+  <div class="panel active" id="panel-teacher">
+    <div class="teacher-toolbar">
+      <div class="count-pill"><strong id="included-count">26</strong> of 26 included</div>
+      <div class="toolbar-actions">
+        <button class="ghost-btn" onclick="setAll(true)">Select all</button>
+        <button class="ghost-btn" onclick="setAll(false)">Clear all</button>
+      </div>
+    </div>
+    <section class="sets-panel" aria-label="Letter sets">
+      <div class="sets-row">
+        <div class="sets-label">Letter sets</div>
+        <div class="set-chips" id="builtin-sets"></div>
+      </div>
+      <form class="sets-row" id="name-form" autocomplete="off">
+        <label class="sets-label" for="name-input">From a name</label>
+        <div class="inline-form">
+          <input id="name-input" class="text-input" type="text" maxlength="40" placeholder="Type a name, like Maya">
+          <button class="ghost-btn solid" type="submit">Use these letters</button>
+        </div>
+      </form>
+      <div class="sets-row">
+        <div class="sets-label">My sets</div>
+        <div class="set-chips" id="my-sets"></div>
+      </div>
+      <form class="sets-row" id="save-form" autocomplete="off">
+        <label class="sets-label" for="save-input">Save picked letters</label>
+        <div class="inline-form">
+          <input id="save-input" class="text-input" type="text" maxlength="30" placeholder="Set name, like Week 3">
+          <button class="ghost-btn solid" type="submit">Save set</button>
+        </div>
+      </form>
+      <div class="set-note" id="set-note" aria-live="polite"></div>
+    </section>
+
+    <div class="letter-grid" id="letter-grid"></div>
+  </div>
+
+  <div class="panel" id="panel-game">
+    <div class="game-wrap" id="game-wrap"></div>
+  </div>
+</div>
+
+<script>
+
+const LETTERS = "abcdefghijklmnopqrstuvwxyz".split("");
+
+// soft pastel card colors, like classroom flash cards
+const CARD_COLORS = ["#fbe3dc", "#fdf3c4", "#dff0dc", "#dcebf7", "#ece2f5", "#fde5ef"];
+
+// Built-in letter sets
+const BUILT_IN_SETS = [
+  { id: "all", name: "All letters", letters: LETTERS.join("") },
+  { id: "vowels", name: "Vowels", hint: "a e i o u", letters: "aeiou" },
+  { id: "satpin", name: "First sounds", hint: "s a t p i n", letters: "satpin" }
+];
+
+// ---------- saving (this browser only; the app still works if storage is blocked) ----------
+const STORE_SELECTION = "letterReview.selection";
+const STORE_SETS = "letterReview.savedSets";
+
+function storeGet(key) {
+  try { return localStorage.getItem(key); } catch (e) { return null; }
+}
+function storeSet(key, value) {
+  try { localStorage.setItem(key, value); } catch (e) { /* ignore */ }
+}
+
+function loadSavedSets() {
+  try {
+    const parsed = JSON.parse(storeGet(STORE_SETS) || "[]");
+    return Array.isArray(parsed) ? parsed.filter(s => s && typeof s.name === "string" && typeof s.letters === "string") : [];
+  } catch (e) { return []; }
+}
+
+let savedSets = loadSavedSets();
+
+// state: which letters are included (default: all, or whatever was saved last time)
+const included = {};
+const savedSelection = storeGet(STORE_SELECTION);
+LETTERS.forEach(l => included[l] = savedSelection === null ? true : savedSelection.includes(l));
+
+function selectionString() {
+  return LETTERS.filter(l => included[l]).join("");
+}
+
+function saveSelection() {
+  storeSet(STORE_SELECTION, selectionString());
+}
+
+// game state
+let deck = [];
+let currentIndex = 0;
+let activeTab = "teacher";
+let animating = false;
+
+function switchTab(tab) {
+  activeTab = tab;
+  document.getElementById('panel-teacher').classList.toggle('active', tab === 'teacher');
+  document.getElementById('panel-game').classList.toggle('active', tab === 'game');
+  document.getElementById('tab-teacher-btn').classList.toggle('active', tab === 'teacher');
+  document.getElementById('tab-game-btn').classList.toggle('active', tab === 'game');
+
+  if (tab === 'game') {
+    startGame();
+  }
+}
+
+function selectionChanged() {
+  const n = LETTERS.filter(l => included[l]).length;
+  document.getElementById('included-count').textContent = n;
+  saveSelection();
+  renderSets();
+}
+
+function renderTeacherGrid() {
+  const grid = document.getElementById('letter-grid');
+  grid.innerHTML = '';
+  LETTERS.forEach(l => {
+    const tile = document.createElement('div');
+    tile.className = 'letter-tile' + (included[l] ? ' included' : '');
+    tile.setAttribute('data-letter', l);
+    tile.innerHTML = `
+      <div class="glyph">${l.toUpperCase()}${l}</div>
+      <div class="checkbox">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#3a2a10" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+    `;
+    tile.addEventListener('click', () => {
+      included[l] = !included[l];
+      tile.classList.toggle('included', included[l]);
+      setNote("");
+      selectionChanged();
+    });
+    grid.appendChild(tile);
+  });
+  selectionChanged();
+}
+
+function setAll(val) {
+  LETTERS.forEach(l => included[l] = val);
+  setNote("");
+  renderTeacherGrid();
+}
+
+// ---------- letter sets ----------
+function cleanLetters(text) {
+  const seen = [];
+  text.toLowerCase().split("").forEach(ch => {
+    if (LETTERS.includes(ch) && !seen.includes(ch)) seen.push(ch);
+  });
+  return seen.join("");
+}
+
+function sameLetters(a, b) {
+  return cleanLetters(a).split("").sort().join("") === cleanLetters(b).split("").sort().join("");
+}
+
+function applyLetters(letters) {
+  const chosen = cleanLetters(letters);
+  LETTERS.forEach(l => included[l] = chosen.includes(l));
+  renderTeacherGrid();
+}
+
+function setNote(text) {
+  document.getElementById('set-note').textContent = text;
+}
+
+function escapeHtml(text) {
+  return text.replace(/[&<>"']/g, ch => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+}
+
+function spaced(letters) {
+  return letters.split("").join(" ");
+}
+
+function renderSets() {
+  const current = selectionString();
+  const builtIn = document.getElementById('builtin-sets');
+  builtIn.innerHTML = '';
+  BUILT_IN_SETS.forEach(set => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'set-chip' + (current && sameLetters(set.letters, current) ? ' active' : '');
+    btn.innerHTML = escapeHtml(set.name) + (set.hint ? ` <span class="chip-hint">${escapeHtml(set.hint)}</span>` : '');
+    btn.addEventListener('click', () => { applyLetters(set.letters); setNote(""); });
+    builtIn.appendChild(btn);
+  });
+
+  const mine = document.getElementById('my-sets');
+  mine.innerHTML = '';
+  if (savedSets.length === 0) {
+    mine.innerHTML = '<span class="sets-empty">None yet. Pick some letters, then save them here.</span>';
+  }
+  savedSets.forEach((set, index) => {
+    const chip = document.createElement('span');
+    chip.className = 'set-chip saved' + (current && sameLetters(set.letters, current) ? ' active' : '');
+    chip.innerHTML = `
+      <button type="button" class="chip-main" title="${escapeHtml(spaced(set.letters))}">${escapeHtml(set.name)} <span class="chip-hint">${set.letters.length}</span></button>
+      <button type="button" class="chip-delete" aria-label="Delete set ${escapeHtml(set.name)}">&times;</button>
+    `;
+    chip.querySelector('.chip-main').addEventListener('click', () => { applyLetters(set.letters); setNote(`Using "${set.name}": ${spaced(set.letters)}`); });
+    const del = chip.querySelector('.chip-delete');
+    del.addEventListener('click', () => {
+      // tap once to ask, tap again to delete (pop-up dialogs don't work everywhere)
+      if (!del.classList.contains('armed')) {
+        del.classList.add('armed');
+        del.textContent = 'Delete?';
+        setTimeout(() => { if (del.isConnected) { del.classList.remove('armed'); del.innerHTML = '&times;'; } }, 4000);
+        return;
+      }
+      savedSets.splice(index, 1);
+      setNote(`Deleted "${set.name}".`);
+      storeSet(STORE_SETS, JSON.stringify(savedSets));
+      renderSets();
+    });
+    mine.appendChild(chip);
+  });
+}
+
+function useNameLetters(event) {
+  event.preventDefault();
+  const input = document.getElementById('name-input');
+  const letters = cleanLetters(input.value);
+  if (!letters) {
+    setNote("Type a name with at least one letter.");
+    input.focus();
+    return;
+  }
+  applyLetters(letters);
+  setNote(`Letters in "${input.value.trim()}": ${spaced(letters)}`);
+}
+
+function saveCurrentSet(event) {
+  event.preventDefault();
+  const input = document.getElementById('save-input');
+  const name = input.value.trim();
+  const letters = selectionString();
+  if (!letters) { setNote("Pick at least one letter before saving a set."); return; }
+  if (!name) { setNote("Give the set a name, like \"Week 3\"."); input.focus(); return; }
+  const existing = savedSets.findIndex(s => s.name.toLowerCase() === name.toLowerCase());
+  if (existing >= 0) {
+    savedSets[existing] = { name, letters };
+  } else {
+    savedSets.push({ name, letters });
+  }
+  storeSet(STORE_SETS, JSON.stringify(savedSets));
+  input.value = '';
+  setNote(`${existing >= 0 ? 'Updated' : 'Saved'} "${name}": ${spaced(letters)}`);
+  renderSets();
+}
+
+// ---------- game ----------
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startGame() {
+  const selected = LETTERS.filter(l => included[l]);
+  deck = shuffle(selected);
+  currentIndex = 0;
+  animating = false;
+  renderGame();
+}
+
+function fullscreenButton() {
+  if (!fullscreenSupported()) return '';
+  const on = isFullscreen();
+  return `<button class="ghost-btn fs-btn" type="button" onclick="toggleFullscreen()">${on ? 'Exit full screen' : '&#x26F6; Full screen'}</button>`;
+}
+
+function renderGame() {
+  const wrap = document.getElementById('game-wrap');
+
+  if (deck.length === 0) {
+    wrap.innerHTML = `
+      <div class="empty-state">
+        <span class="icon">&#9998;</span>
+        <h2>No letters selected</h2>
+        <p>Head to the Teacher tab and include at least one letter to start playing.</p>
+      </div>
+    `;
+    return;
+  }
+
+  if (currentIndex >= deck.length) {
+    wrap.innerHTML = `
+      <div class="game-top">${fullscreenButton()}</div>
+      <div class="done-state">
+        <span class="icon">&#127881;</span>
+        <h2>All done!</h2>
+        <p>You've seen all ${deck.length} card${deck.length === 1 ? '' : 's'}.</p>
+        <div class="done-actions">
+          <button class="ghost-btn big" type="button" onclick="prevCard()">&larr; Back</button>
+          <button class="restart-btn" type="button" onclick="startGame()">Shuffle &amp; play again</button>
+        </div>
+      </div>
+    `;
+    return;
+  }
+
+  const letter = deck[currentIndex];
+  const tilt = (Math.random() * 4 - 2).toFixed(2);
+
+  wrap.innerHTML = `
+    <div class="game-top">
+      <div class="progress-row">
+        <span>${currentIndex + 1} / ${deck.length}</span>
+        <div class="progress-track"><div class="progress-fill" style="width:${((currentIndex) / deck.length) * 100}%"></div></div>
+      </div>
+      ${fullscreenButton()}
+    </div>
+    <div class="easel">
+      <div class="card-shell" id="card-shell" style="--tilt:${tilt}deg">
+        <div class="letter-card" style="--card-bg:${CARD_COLORS[LETTERS.indexOf(letter) % CARD_COLORS.length]}" role="img" aria-label="Letter ${letter.toUpperCase()}">
+          <span class="big-letters" aria-hidden="true">${letter.toUpperCase()}${letter}</span>
+        </div>
+      </div>
+    </div>
+    <div class="rail"></div>
+    <div class="nav-row">
+      <button class="back-btn" type="button" onclick="prevCard()" ${currentIndex === 0 ? 'disabled' : ''}>&larr; Back</button>
+      <button class="next-btn" type="button" onclick="nextCard()">Next &rarr;</button>
+    </div>
+    <div class="key-hint">Keyboard: Space or &rarr; for next, &larr; to go back</div>
+  `;
+}
+
+function moveTo(newIndex) {
+  if (animating || deck.length === 0) return;
+  if (newIndex < 0 || newIndex > deck.length) return;
+  const shell = document.getElementById('card-shell');
+  if (shell) {
+    animating = true;
+    shell.classList.add('flip-out');
+    setTimeout(() => {
+      animating = false;
+      currentIndex = newIndex;
+      renderGame();
+    }, 140);
+  } else {
+    currentIndex = newIndex;
+    renderGame();
+  }
+}
+
+function nextCard() { if (currentIndex < deck.length) moveTo(currentIndex + 1); }
+function prevCard() { if (currentIndex > 0) moveTo(currentIndex - 1); }
+
+// ---------- keyboard ----------
+document.addEventListener('keydown', event => {
+  if (activeTab !== 'game' || event.altKey || event.ctrlKey || event.metaKey) return;
+  const tag = (event.target.tagName || '').toLowerCase();
+  if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+
+  if (event.key === 'ArrowRight' || event.key === ' ' || event.key === 'Spacebar' || event.key === 'PageDown') {
+    event.preventDefault();
+    if (currentIndex < deck.length) nextCard();
+  } else if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+    event.preventDefault();
+    prevCard();
+  }
+});
+
+// ---------- full screen (for a projector or smartboard) ----------
+function fullscreenSupported() {
+  return !!(document.fullscreenEnabled || document.webkitFullscreenEnabled);
+}
+function isFullscreen() {
+  return !!(document.fullscreenElement || document.webkitFullscreenElement);
+}
+function toggleFullscreen() {
+  const root = document.documentElement;
+  try {
+    if (isFullscreen()) {
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    } else {
+      const req = root.requestFullscreen || root.webkitRequestFullscreen;
+      const result = req.call(root);
+      if (result && result.catch) result.catch(() => {});
+    }
+  } catch (e) { /* not allowed here; ignore */ }
+}
+function fullscreenChanged() {
+  document.body.classList.toggle('is-fullscreen', isFullscreen());
+  if (activeTab === 'game' && !animating) renderGame();
+}
+document.addEventListener('fullscreenchange', fullscreenChanged);
+document.addEventListener('webkitfullscreenchange', fullscreenChanged);
+
+document.getElementById('name-form').addEventListener('submit', useNameLetters);
+document.getElementById('save-form').addEventListener('submit', saveCurrentSet);
+renderTeacherGrid();
+</script>
+</body>
+</html>
