@@ -50,7 +50,7 @@
 
     .games {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 24px;
     }
 
@@ -132,6 +132,16 @@
       transform: rotate(-3deg);
     }
 
+    .flash.pic {
+      flex-direction: column;
+      gap: 4px;
+      font-size: 2.2rem;
+      background: #fbe3dc;
+      transform: rotate(3deg);
+    }
+
+    .flash.pic .apple { font-size: 2.4rem; line-height: 1; }
+
     .game h2 {
       margin: 4px 0 0;
       font-size: clamp(1.5rem, 3.4vw, 1.9rem);
@@ -146,7 +156,7 @@
     }
 
     .play {
-      margin-top: 6px;
+      margin-top: auto;
       font-weight: 800;
       font-size: 1.15rem;
       padding: 12px 30px;
@@ -201,6 +211,15 @@
         </div>
         <h2>Letter Review</h2>
         <p>Big, clear letter cards. Teachers pick the letters or a letter set first.</p>
+        <span class="play">Play</span>
+      </a>
+
+      <a class="game" href="letter-picture-cards.html">
+        <div class="art art-letters" aria-hidden="true">
+          <div class="flash pic"><span>Aa</span><span class="apple">&#127822;</span></div>
+        </div>
+        <h2>Letter Picture Cards</h2>
+        <p>Letter cards with a picture for each sound. Teachers pick the letters or a letter set first.</p>
         <span class="play">Play</span>
       </a>
     </div>
